@@ -13,6 +13,7 @@ try:
 except ImportError as ex:
     raise ImportError("Please install pySerial module (Python 3)")
 import time
+from pyupspack.exceptions import SmartUPSInitializationError
 
 
 def identify_serial_device():
@@ -26,10 +27,12 @@ def identify_serial_device():
         device = '/dev/%s' % (r.split(' ')[-1])
         if os.path.exists(device):
             lst.append(device)
-    assert (len(lst) == 0, 'No USB/TTL device found')
     lst = list(set(lst))
     lst.sort()
-    assert (len(lst) > 1, 'Too many USB/TTL devices found: %s' % str(lst))
+    if len(lst) > 1:
+        raise SmartUPSInitializationError("I found %d USB/TTL devices. Please specify the one I should use." % len(lst))
+    if len(lst) == 0:
+        raise SmartUPSInitializationError("I found zero USB/TTL devices. Please install or find one.")
     serial_device = lst[0]
     return serial_device
 

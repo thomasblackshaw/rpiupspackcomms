@@ -20,7 +20,8 @@ except ImportError as ex:
     raise ImportError("Please install pySerial module (Python 3)")
 import time
 
-from my_exceptions import ReadSmartUPSError, ReadOnlyError, CachingStructureInitializationError
+from pyupspack.exceptions import ReadSmartUPSError, ReadOnlyError, CachingStructureInitializationError
+from pyupspack.utilities import identify_serial_device
 
 
 class SmartUPSInterface:

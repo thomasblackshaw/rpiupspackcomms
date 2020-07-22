@@ -21,7 +21,7 @@ except ImportError as ex:
     raise ImportError("Please install pySerial module (Python 3)")
 import time
 
-from smartupscontroller import SmartUPS
+from pyupspack import SmartUPS
 
 
 def __main__():
