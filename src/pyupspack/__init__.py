@@ -14,20 +14,22 @@ import os
 import random
 from threading import Condition, Lock, Thread
 from time import sleep
+import time
+
+from pyupspack.classes import ReadWriteLock, DummyCachingCall, SelfCachingCall
+from pyupspack.exceptions import ReadSmartUPSError, ReadOnlyError, CachingStructureInitializationError, CachingStructurePrematureReadError
+from pyupspack.utilities import identify_serial_device, loworchargebattery_string_info, sleep_for_a_random_period
+
 try:
     import serial
 except ImportError as ex:
     raise ImportError("Please install pySerial module (Python 3)")
-import time
-
-from pyupspack.exceptions import ReadSmartUPSError, ReadOnlyError, CachingStructureInitializationError
-from pyupspack.utilities import identify_serial_device
 
 
 class SmartUPSInterface:
 
     def __init__(self, serial_device, use_caching=True, pause_duration_between_uncached_reads=1):
-#         self.__serialdev_lck = ReadWriteLock()
+        self.__serialdev_lck = ReadWriteLock()
         self.__smupsinfo_lck = ReadWriteLock()
         self.__battlevel_lck = ReadWriteLock()
         self.__smversion_lck = ReadWriteLock()
@@ -103,8 +105,7 @@ class SmartUPSInterface:
     def latest_serial_rx(self, value):
         raise ReadOnlyError("Cannot set cached_smartups attribute. That is inappropriate!")
 
-    def _read_smartups_output(self):
-        # FIXME: add a read-write lock for self._last_time_we_read_smartups etc.
+    def _read_smartups_output(self):  # FIXME: add a read-write lock for self._last_time_we_read_smartups etc.
         current_timestamp = datetime.datetime.now()
         if self._last_time_we_read_smartups is None or (current_timestamp - self._last_time_we_read_smartups).seconds >= 1:
             self._last_time_we_read_smartups = current_timestamp
@@ -289,13 +290,13 @@ class SmartUPSInterface:
         initial_battery_level = self._what_was_battery_level_when_we_did_start_disch_or_rchgg
         current_battery_level = int(retdct['BATCAP'].strip('%'))
         battery_level_difference = initial_battery_level - current_battery_level
-        time_taken_to_change_by_one_percentage_point = None if battery_level_difference == 0 else seconds_since_discharging_began / float(battery_level_difference)
+        time_taken_to_change_by_one_percentage_point = 0 if battery_level_difference == 0 else seconds_since_discharging_began / float(battery_level_difference)
         retdct['timeleft'] = None
         if current_battery_level == 100 and not self.discharging:
             self._verbose_werewechargingordischarging = 'neither'
             retdct['timeleft'] = 0
             retdct['verbose'] = "Battery is full and trickle-charging."
-        elif initial_battery_level is None or time_taken_to_change_by_one_percentage_point is None:
+        elif initial_battery_level is None or time_taken_to_change_by_one_percentage_point == 0:
             retdct['verbose'] = "Battery is %s; currently at %d%%." % ("recharging" if self.charging else "discharging" if self.discharging else "trickling", current_battery_level)  # retdct['Vin' ] == 'GOOD' else "discharging" if current_battery_level < 100
         elif self.discharging:
             retdct['timeleft'] = time_taken_to_change_by_one_percentage_point * (initial_battery_level - 20)

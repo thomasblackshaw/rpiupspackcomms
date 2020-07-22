@@ -10,6 +10,7 @@ class Error(Exception):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Base class for other exceptions'
 
 
 class InitializationError(Error):
@@ -17,6 +18,7 @@ class InitializationError(Error):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Class for all initialization errors'
 
 
 class CachingStructureInitializationError(InitializationError):
@@ -24,6 +26,7 @@ class CachingStructureInitializationError(InitializationError):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Class for all caching structure initialization errors'
 
 
 class CachingStructurePrematureReadError(InitializationError):
@@ -31,6 +34,7 @@ class CachingStructurePrematureReadError(InitializationError):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Class for all caching structure premature read errors'
 
 
 class SmartUPSInitializationError(InitializationError):
@@ -38,6 +42,7 @@ class SmartUPSInitializationError(InitializationError):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Class for all smart ups initialization errors'
 
 
 class ReadError(Error):
@@ -46,6 +51,7 @@ class ReadError(Error):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Class for all read errors'
 
 
 class ReadSmartUPSError(ReadError):
@@ -54,6 +60,7 @@ class ReadSmartUPSError(ReadError):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Class for all read-smart-ups errors'
 
 
 class ReadOnlyError(ReadError):
@@ -62,6 +69,7 @@ class ReadOnlyError(ReadError):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Class for all read-only errors --- do not write'
 
 
 class CachingError(Error):
@@ -69,3 +77,5 @@ class CachingError(Error):
 
     def __init__(self, message):
         super().__init__(message)
+        self.__doc__ = 'Class for all caching errors'
+

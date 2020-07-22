@@ -8,29 +8,20 @@ Equipment needed:=
 - USB-to-TTL converter --- www.friendlyarm.com/
 '''
 
-import copy
-import datetime
-import os
-import random
-from threading import Condition, Lock, Thread
-from time import sleep
-
-try:
-    import serial
-except ImportError as ex:
-    raise ImportError("Please install pySerial module (Python 3)")
-import time
-
-from pyupspack import SmartUPS
+# try:
+#     import serial
+# except ImportError as ex:
+#     raise ImportError("Please install pySerial module (Python 3)")
 
 
 def __main__():
-    print("serial device = %s" % read_smartups_output(SmartUPS.serial_device))
-    SmartUPS.verbose
-    SmartUPS.batterylevel
-    SmartUPS.discharging
-    SmartUPS.charging
-    SmartUPS.Vout
+    from pyupspack import SmartUPS
+#     print("serial device = %s" % SmartUPS._forgivingly_read_smartups_output())
+#     SmartUPS.verbose
+#     SmartUPS.batterylevel
+#     SmartUPS.discharging
+#     SmartUPS.charging
+#     SmartUPS.Vout
     from time import sleep
     while True:
         print("Vout=%1.4f; charging?%s; discharging?%s; batterylevel=%d%%; timeleft=%s; verbose=%s" % (SmartUPS.Vout, 'Yes' if SmartUPS.charging else 'No',

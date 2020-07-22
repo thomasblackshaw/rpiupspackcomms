@@ -2,17 +2,9 @@
 '''
 '''
 
-import copy
-import datetime
 import os
 import random
-from threading import Condition, Lock, Thread
 from time import sleep
-try:
-    import serial
-except ImportError as ex:
-    raise ImportError("Please install pySerial module (Python 3)")
-import time
 from pyupspack.exceptions import SmartUPSInitializationError
 
 
