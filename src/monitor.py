@@ -56,14 +56,10 @@ if __name__ == "__main__":
                 send_global_message(SmartUPS.verbose)  # """Power is back online.""")
         if SmartUPS.discharging and SmartUPS.batterylevel is not None and SmartUPS.batterylevel < 10:
             loops_since_last_warning += 1
-            if loops_since_last_warning > SmartUPS.batterylevel:  # 11:
+            if loops_since_last_warning > SmartUPS.batterylevel:
                 loops_since_last_warning = 0
                 send_global_message(SmartUPS.verbose)
-#                 """Power is offline.
-# Battery level is at %d%% and falling.
-# %d minutes remaining""" % (SmartUPS.batterylevel, SmartUPS.timeleft // 60))
         if SmartUPS.batterylevel is not None and SmartUPS.batterylevel < 10:
             send_global_message("SHUTTING DOWN")
             os.system("shutdown -h now")
         sleep(5)
-
