@@ -28,5 +28,7 @@ EOF
 
 dpkg-deb --build rpiupspackcomms
 
-mv rpiupspackcomms.deb rpiupspackcomms-"$OURVER"_all.deb
- 
+outf=rpiupspackcomms-"$OURVER"_all.deb
+mv rpiupspackcomms.deb $outf
+echo "New package: $outf"
+exit 0
