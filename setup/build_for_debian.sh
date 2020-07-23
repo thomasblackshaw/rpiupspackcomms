@@ -12,7 +12,7 @@ mkdir -p rpiupspackcomms/usr/{bin,share/rpiupspackcomms}
 git clone https://github.com/thomasblackshaw/rpiupspackcomms.git rpiupspackcomms/usr/share/rpiupspackcomms
 chmod +x rpiupspackcomms/usr/share/rpiupspackcomms/bash/*
 ln -sf   /usr/share/rpiupspackcomms/bash/rpiupspackcomms.sh rpiupspackcomms/usr/bin/
-ln -sf   /usr/share/rpiupspackcomms/debian/rpiupspackcomms.service /etc/systemd/system/
+ln -sf   /usr/share/rpiupspackcomms/setup/rpiupspackcomms.service /etc/systemd/system/
 
 cat << EOF > rpiupspackcomms/DEBIAN/control
 Package: rpiupspackcomms
