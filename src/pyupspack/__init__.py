@@ -263,11 +263,12 @@ class SmartUPSInterface:
     def timeleft(self):
         try:
             self.__time_left_lck.acquire_read()
-            i = self._return_meaningful_status()['timeleft']
-            if i is None:
-                retval = i
+            status = self._return_meaningful_status()
+            timeleft = None if status is None else status['timeleft']
+            if timeleft is None:
+                retval = timeleft
             else:
-                self.__timeleft_list.insert(0, i)
+                self.__timeleft_list.insert(0, timeleft)
                 if len(self.__timeleft_list) >= 10:
                     _ = self.__timeleft_list.pop()
                 retval = sum(self.__timeleft_list) // len(self.__timeleft_list)
