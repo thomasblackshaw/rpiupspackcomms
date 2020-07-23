@@ -1,0 +1,28 @@
+HOW TO BUILD DEBIAN PKG OF RPIUPSPACKCOMMS
+
+https://linuxconfig.org/easy-way-to-create-a-debian-package-and-local-package-repository
+
+
+
+mkdir -p     rpiupspackcomms/DEBIAN
+
+cat << EOF > rpiupspackcomms/DEBIAN/control
+Package: rpiupspackcomms
+Version: 0.1
+Section: custom
+Priority: optional
+Architecture: all
+Essential: no
+Installed-Size: 1024
+Maintainer: Thomas Blackshaw <thomas.blackshaw@protonmail.com>
+Description: Communications for RPi UPSPack, sold at https://www.makerfocus.com/products/raspberry-pi-expansion-board-ups-pack-standard-power-supply
+EOF
+
+mkdir -p rpiupspackcomms/usr/local/{bin,share}
+cd       rpiupspackcomms/usr/local/share 
+git clone https://github.com/thomasblackshaw/rpiupspackcomms.git rpiupspackcomms/usr/local/share
+chmod +x rpiupspackcomms/usr/local/bin/*
+ln -sf rpiupspackcomms/usr/local/share/bash/rpiupspackcomms.sh rpiupspackcomms/usr/local/bin/
+dpkg-deb --build rpiupspackcomms
+
+mv rpiupspackcomms
