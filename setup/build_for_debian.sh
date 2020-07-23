@@ -28,7 +28,8 @@ Description: Communications for RPi UPSPack, sold at https://www.makerfocus.com/
 EOF
 
 cat << EOF > rpiupspackcomms/DEBIAN/postinst
-#mkdir -p /usr/share/rpiupspackcomms/src/pyupspack/__pycache__ 
+#mkdir -p /usr/share/rpiupspackcomms/src/pyupspack/__pycache__
+ln -sf   /usr/share/rpiupspackcomms/setup/rpiupspackcomms.service /etc/systemd/system/
 systemctl enable rpiupspackcomms
 EOF
 
