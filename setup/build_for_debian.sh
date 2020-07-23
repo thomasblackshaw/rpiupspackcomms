@@ -34,8 +34,9 @@ systemctl enable rpiupspackcomms
 EOF
 
 cat << EOF > rpiupspackcomms/DEBIAN/prerm
+systemctl stop    rpiupspackcomms || true
 systemctl disable rpiupspackcomms || true
-#[ -e "/usr/share/rpiupspackcomms/src/pyupspack/__pycache__" ] && rm -f /usr/share/rpiupspackcomms/src/pyupspack/__pycache__ 
+rm -Rf /usr/share/rpiupspackcomms/src/pyupspack/__pycache__ || true
 EOF
 
 
