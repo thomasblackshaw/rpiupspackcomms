@@ -137,7 +137,6 @@ class SelfCachingCall:
             'We have not cached the first result yet')
         self.__result_and_error_lock = ReadWriteLock()
         self.__time_to_join = False
-        self.__update_lock = ReadWriteLock()
         self.__keepupdating_thread = Thread(target=self._keep_updating)
         self.__keepupdating_thread.daemon = True
         self.__keepupdating_thread.start()
@@ -162,18 +161,17 @@ class SelfCachingCall:
                 time_left_before_update -= sleep_for_how_long
                 sleep(sleep_for_how_long)
         print('No more soup for you')
-
 #         self.join() # FIXME: Why was this commented out?!
+
     def _update_me(self):
         try:
-            self.__update_lock.acquire_write()
             the_new_result = self.__func(*self.__args, **self.__kwargs)
             the_new_error = None
         except Exception as e:
             the_new_result = None
             the_new_error = e
         finally:
-            self.__update_lock.release_write()
+            pass
         try:
             self.__result_and_error_lock.acquire_write()
             self.__error = the_new_error
