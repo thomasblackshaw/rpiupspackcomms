@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sed -i s/.*rpiupspack.*// /etc/rc.local
+rm -Rf /usr/share/rpiupspackcomms* /usr/bin/rpiupspackcomms*
