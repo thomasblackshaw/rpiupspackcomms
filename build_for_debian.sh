@@ -8,10 +8,10 @@ OURVER=0.1-1
 
 set +e
 mkdir -p rpiupspackcomms/DEBIAN
-mkdir -p rpiupspackcomms/usr/local/{bin,share/rpiupspackcomms}
-git clone https://github.com/thomasblackshaw/rpiupspackcomms.git rpiupspackcomms/usr/local/share/rpiupspackcomms
-chmod +x rpiupspackcomms/usr/local/share/rpiupspackcomms/bash/*
-ln -sf   /usr/local/share/rpiupspackcomms/bash/rpiupspackcomms.sh rpiupspackcomms/usr/local/bin/
+mkdir -p rpiupspackcomms/usr/{bin,share/rpiupspackcomms}
+git clone https://github.com/thomasblackshaw/rpiupspackcomms.git rpiupspackcomms/usr/share/rpiupspackcomms
+chmod +x rpiupspackcomms/usr/share/rpiupspackcomms/bash/*
+ln -sf   /usr/share/rpiupspackcomms/bash/rpiupspackcomms.sh rpiupspackcomms/usr/bin/
 
 cat << EOF > rpiupspackcomms/DEBIAN/control
 Package: rpiupspackcomms

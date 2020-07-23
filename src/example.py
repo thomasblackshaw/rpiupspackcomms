@@ -13,8 +13,7 @@ Equipment needed:=
 # except ImportError as ex:
 #     raise ImportError("Please install pySerial module (Python 3)")
 
-
-def __main__():
+if __name__ == "__main__":
     from pyupspack import SmartUPS
 #     print("serial device = %s" % SmartUPS._forgivingly_read_smartups_output())
 #     SmartUPS.verbose
