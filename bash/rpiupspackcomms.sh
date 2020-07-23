@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd /usr/local/share/rpiupspackcomms/src
-python3 example.py
+cd /usr/share/rpiupspackcomms/src
+python3 monitor.py
 exit $?
