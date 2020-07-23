@@ -169,7 +169,7 @@ class SmartUPSInterface:
             self.__charging_lock.acquire_read()
             try:
                 retval = True if self.__cached_smartups.result['Vin'] == 'GOOD' and self.__cached_smartups.result['BATCAP'] != '100' else False
-            except AttributeError:
+            except (TypeError, AttributeError):
                 return None
         finally:
             self.__charging_lock.release_read()
@@ -185,7 +185,7 @@ class SmartUPSInterface:
             self.__dischargg_lck.acquire_read()
             try:
                 retval = False if self.__cached_smartups.result['Vin'] == 'GOOD' else True
-            except CachingStructurePrematureReadError:
+            except (TypeError, CachingStructurePrematureReadError):
                 return None
         finally:
             self.__dischargg_lck.release_read()
