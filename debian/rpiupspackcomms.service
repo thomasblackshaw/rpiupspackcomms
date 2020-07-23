@@ -11,3 +11,6 @@ ExecStart=/bin/bash /usr/bin/rpiupspackcomms.sh
 
 [Install]
 WantedBy=multi-user.target
+
+
+# https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
