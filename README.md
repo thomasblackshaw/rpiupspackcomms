@@ -6,6 +6,7 @@ Board may be purchased from here: https://www.makerfocus.com/products/raspberry-
 To build and install for Debian systems:-
 
 cd /tmp
+rm -Rf rpiupspackcomms*
 git clone https://github.com/thomasblackshaw/rpiupspackcomms.git
 cd rpiupspackcomms
 bash build_for_debian.sh

@@ -38,7 +38,7 @@ rmdir /usr/share/rpiupspackcomms/src/pyupspack/__pycache__
 EOF
 
 
-
+chmod +x rpiupspackcomms/DEBIAN/{pre,post}*
 dpkg-deb --build rpiupspackcomms
 
 outf=rpiupspackcomms-"$OURVER"_all.deb
