@@ -10,7 +10,7 @@ cd /tmp
 rm -Rf rpiupspackcomms*
 git clone https://github.com/thomasblackshaw/rpiupspackcomms.git
 cd rpiupspackcomms
-bash build_for_debian.sh
+bash debian/build_for_debian.sh
 apt install python3-serial
 dpkg -i rpiupspackcomms*.deb
 ```

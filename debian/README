@@ -4,5 +4,5 @@ https://linuxconfig.org/easy-way-to-create-a-debian-package-and-local-package-re
 
 
 
-# bash build_for_debian.sh
+# bash debian/build_for_debian.sh
 # ls rpiupspackcomms*.deb
