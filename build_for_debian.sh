@@ -12,6 +12,7 @@ mkdir -p rpiupspackcomms/usr/{bin,share/rpiupspackcomms}
 git clone https://github.com/thomasblackshaw/rpiupspackcomms.git rpiupspackcomms/usr/share/rpiupspackcomms
 chmod +x rpiupspackcomms/usr/share/rpiupspackcomms/bash/*
 ln -sf   /usr/share/rpiupspackcomms/bash/rpiupspackcomms.sh rpiupspackcomms/usr/bin/
+ln -sf   /usr/share/rpiupspackcomms/debian/rpiupspackcomms.service /etc/systemd/system/
 
 cat << EOF > rpiupspackcomms/DEBIAN/control
 Package: rpiupspackcomms
@@ -25,6 +26,16 @@ Installed-Size: 1024
 Maintainer: Thomas Blackshaw <thomas.blackshaw@protonmail.com>
 Description: Communications for RPi UPSPack, sold at https://www.makerfocus.com/products/raspberry-pi-expansion-board-ups-pack-standard-power-supply
 EOF
+
+cat << EOF > rpiupspackcomms/DEBIAN/postinst
+systemctl enable rpiupspackcomms
+EOF
+
+cat << EOF > rpiupspackcomms/DEBIAN/prerm
+systemctl disable rpiupspackcomms
+EOF
+
+
 
 dpkg-deb --build rpiupspackcomms
 

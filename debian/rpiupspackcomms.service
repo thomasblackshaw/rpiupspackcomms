@@ -1,0 +1,13 @@
+[Unit]
+Description=RPi UPSPack Communications Service
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+#User=centos
+ExecStart=/bin/bash /usr/bin/rpiupspackcomms.sh
+
+[Install]
+WantedBy=multi-user.target
