@@ -28,12 +28,13 @@ Description: Communications for RPi UPSPack, sold at https://www.makerfocus.com/
 EOF
 
 cat << EOF > rpiupspackcomms/DEBIAN/postinst
+#mkdir -p /usr/share/rpiupspackcomms/src/pyupspack/__pycache__ 
 systemctl enable rpiupspackcomms
 EOF
 
 cat << EOF > rpiupspackcomms/DEBIAN/prerm
 systemctl disable rpiupspackcomms
-[ -e "/usr/share/rpiupspackcomms/src/pyupspack/__pycache__" ] && rm -f /usr/share/rpiupspackcomms/src/pyupspack/__pycache__ 
+#[ -e "/usr/share/rpiupspackcomms/src/pyupspack/__pycache__" ] && rm -f /usr/share/rpiupspackcomms/src/pyupspack/__pycache__ 
 EOF
 
 
