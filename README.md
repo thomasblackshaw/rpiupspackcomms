@@ -23,6 +23,7 @@ rm -Rf rpiupspackcomms*
 git clone https://github.com/thomasblackshaw/rpiupspackcomms.git
 cd rpiupspackcomms
 bash setup/install_on_generic.sh
+# bash setup/uninstall_from_generic.sh        # to uninstall
 ```
 
 
