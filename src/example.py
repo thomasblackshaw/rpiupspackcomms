@@ -23,7 +23,13 @@ if __name__ == "__main__":
 #     SmartUPS.Vout
     from time import sleep
     while True:
-        print("Vout=%1.4f; charging?%s; discharging?%s; batterylevel=%d%%; timeleft=%s; verbose=%s" % (SmartUPS.Vout, 'Yes' if SmartUPS.charging else 'No',
-                            'Yes' if SmartUPS.discharging else 'No', SmartUPS.batterylevel, ((str(SmartUPS.timeleft // 60) + 'm') if SmartUPS.timeleft is not None else '?'), SmartUPS.verbose))
+        if SmartUPS.Vout is None:
+            s = "Waiting for UPS to connect"
+        else:
+            s = "Vout=%1.4f; charging?%s; discharging?%s; batterylevel=%d%%; timeleft=%s; verbose=%s" % (SmartUPS.Vout, 'Yes' if SmartUPS.charging else 'No',
+                        'Yes' if SmartUPS.discharging else 'No', SmartUPS.batterylevel, ('?' if SmartUPS.timeleft is None else (str(SmartUPS.timeleft // 60) + 'm')), SmartUPS.verbose)
+        print(s)
+        with open("/var/log/rpiupspackcomms", "a") as f:
+            f.write(s + '\n')
         sleep(5)
 
