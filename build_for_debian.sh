@@ -33,6 +33,8 @@ EOF
 
 cat << EOF > rpiupspackcomms/DEBIAN/prerm
 systemctl disable rpiupspackcomms
+rm -f /usr/share/rpiupspackcomms/src/pyupspack/__pycache__/*
+rmdir /usr/share/rpiupspackcomms/src/pyupspack/__pycache__
 EOF
 
 
