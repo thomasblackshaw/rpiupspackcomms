@@ -14,3 +14,15 @@ bash debian/build_for_debian.sh
 apt install python3-serial
 dpkg -i rpiupspackcomms*.deb
 ```
+
+Or, for non-Debian-derived GNU/Linux operating systems:-
+
+```
+cd /tmp
+rm -Rf rpiupspackcomms*
+git clone https://github.com/thomasblackshaw/rpiupspackcomms.git
+cd rpiupspackcomms
+bash bash/install_on_generic.sh
+```
+
+
