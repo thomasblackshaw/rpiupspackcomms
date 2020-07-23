@@ -3,6 +3,4 @@ HOW TO BUILD DEBIAN PKG OF RPIUPSPACKCOMMS
 https://linuxconfig.org/easy-way-to-create-a-debian-package-and-local-package-repository
 
 
-
-# bash debian/build_for_debian.sh
-# ls rpiupspackcomms*.deb
+See ../README.md and build_for_debian.sh
