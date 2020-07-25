@@ -82,6 +82,9 @@ class SmartUPSInterface:
             
         serial_device (str): The serial device with which we're communicating. This
             was set by SmartUPS when the instance was created.
+        
+        timeleft (int): The amount of time left before battery is full/empty.
+            If unknown, returns None.
             
         verbose (str): The verbose, made-by-me, human-readable output that describes
             the current status of the UPSPack.
