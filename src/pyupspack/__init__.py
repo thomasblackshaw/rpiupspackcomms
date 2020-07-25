@@ -147,6 +147,10 @@ class SmartUPSInterface:
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS
         )
+        if serial_device is None or type(serial_device) is not str or not os.path.exists(serial_device):
+            raise ValueError("serial_device should be a string and also an existent filename/device")
+        if type(pause_duration_between_uncached_reads) is not int or pause_duration_between_uncached_reads < 1:
+            raise ValueError("pause_duration_between_uncached_reads must be a nonzero positive integer")
 #         os.system("stty -F %s 9600 cs8 -cstopb -parenb" % self.__serial_device)
         self.__cached_smartups = DummyCachingCall(pause_duration_between_uncached_reads, self._forgivingly_read_smartups_output) \
                                 if not use_caching else \
