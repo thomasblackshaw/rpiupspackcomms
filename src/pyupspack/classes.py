@@ -3,12 +3,8 @@
 '''
 
 import copy
-import datetime
-import os
-import random
 from threading import Condition, Lock, Thread
 from time import sleep
-import time
 
 from pyupspack.exceptions import CachingStructurePrematureReadError
 from pyupspack.utilities import sleep_for_a_random_period
