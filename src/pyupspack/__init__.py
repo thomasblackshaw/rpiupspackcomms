@@ -1,12 +1,38 @@
 #!/usr/bin/python3
 
-'''
-smartupsconroller --- Python script to monitor the RPi UPSPack Standard V2
+"""Python library to monitor the RPi UPSPack Standard V2
 
-Equipment needed:=
-- UPS board --- www.makersmthing.com/...
-- USB-to-TTL converter --- www.friendlyarm.com/
-'''
+The module 'pyupspack' facilitates communication between the RPi UPSPack Standard
+V2 and a GNU/Linux-based OS that possesses a decent Python 3 implementation. The
+library is utilized by the monitor.py executable. The communication consists of
+reading the human-readable output from the detected TTL-USB interface and processing
+it into something meaningful. The RPi UPSPack may be purchased from
+```https://www.makerfocus.com/products/raspberry-pi-expansion-board-ups-pack-standard-power-supply```.
+
+Example:
+    Here is a simple example of how to use the library::
+    
+    $ python3
+    >>> from pyupspack import SmartUPS
+    >>> import time
+    >>> while True:
+    >>>     print(SmartUPS.verbose)
+    >>>     time.sleep(5)
+    >>>
+
+SmartUPS is a singular (?) globally available instance of the SmartUPSInterface
+class. Import SmartUPS. Do not use SmartUPSInterface.
+
+For a full list of attributes and methods, see the SmartUPSInterface source code.
+
+Todo: QQQ
+    * For module TODOs
+    * You have to also use ``sphinx.ext.todo`` extension
+
+.. _Google Python Style Guide:
+   http://google.github.io/styleguide/pyguide.html
+
+"""
 
 import copy
 import datetime
@@ -27,8 +53,74 @@ except ImportError as ex:
 
 
 class SmartUPSInterface:
+    """Interface class for the RPi UPSPack Standard V2
+
+    Attributes:
+        Vout (float): Voltage out from the UPSPack's battery.
+            If unknown, returns None.
+    
+        batterylevel (int): Between 0 and 100, with 100==full and 0=empty.
+            If unknown, returns None.
+        
+        timeleft (int): Time until battery empties/fills entirely.
+            If unknown, returns None.
+    
+        cached_smartups (str): The cached version of _latest_serial_rx. Please use
+            this, rather than _latest_serial_rx, because it is cached and therefore
+            doesn't cause you to wait for the serial port to spit something out.
+    
+        charging (bool): If the UPSPack is charging, True; else, False.
+            If unknown, returns None.
+    
+        discharging (bool): If the UPSPack is discharging, True; else, False.
+            If unknown, returns None.
+        
+        hardwareversion (str): The current hardware version of the UPSPack.
+
+        _latest_serial_rx (str): The latest human-readable output from the detected
+            USB port. This is drawn from the port immediately.
+            
+        serial_device (str): The serial device with which we're communicating. This
+            was set by SmartUPS when the instance was created.
+            
+        verbose (str): The verbose, made-by-me, human-readable output that describes
+            the current status of the UPSPack.
+                
+    Methods:
+        _return_meaningful_status (): Returns dictionary of attributes derived
+            from the cached output of the SmartUPSInterface's serial device.
+
+        module_level_variable1 (int): Module level variables may be documented in
+            either the ``Attributes`` section of the module docstring, or in an
+            inline docstring immediately following the variable.
+            
+        Todo: QQQ
+        * For module TODOs
+        * You have to also use ``sphinx.ext.todo`` extension
+    
+    .. _Google Python Style Guide:
+       http://google.github.io/styleguide/pyguide.html
+
+    """
 
     def __init__(self, serial_device, use_caching=True, pause_duration_between_uncached_reads=1):
+        """The __init__ method of the SmartUPSInterface class.
+
+        Note:
+            The only instance that should be created (or used) is the SmartUPS instance.
+
+        Args:
+            serial_device (str): Serial device that the RPi UPSPack is using.
+            use_caching (bool): If True, use an internally cached copy of the output of the
+                serial device. Otherwise, read a fresh copy whenever it's needed.
+            pause_duration_between_uncached_reads (:obj:`int`, optional): How often should the cache
+                be updated? This must be a nonzero positive integer.
+                
+        Raises:
+            ValueError: Bad parameters were supplied by the programmer.
+            InitializationError: I failed to initialize this class instance.
+
+        """
         self.__serialdev_lck = ReadWriteLock()
         self.__smupsinfo_lck = ReadWriteLock()
         self.__battlevel_lck = ReadWriteLock()
@@ -64,6 +156,19 @@ class SmartUPSInterface:
         super().__init__()
 
     def _forgivingly_read_smartups_output(self):
+        """Up to ten times, try to obtain a dictionaryized output of the RPi UPSPack's USB port.
+        
+        Returns:
+            dict: A simple dictionary of the output. The structure tends to look like this:-
+                {'Vin':'...', 'Vout':'...', 'hardwareversion':'...', 'BATCAP':'...','SmartUPS':'...'} 
+        
+        Args:
+            None
+
+        Raises:
+            ReadSmartUPSError: I failed to obtain any meaningful output.
+
+        """
         for attempts in range(10):
             try:
                 res = self._read_smartups_output()
@@ -73,6 +178,18 @@ class SmartUPSInterface:
         raise ReadSmartUPSError("Attempted %d times to read the smartUPS output. Failed totally." % attempts)
 
     def _wait_until_nonNone_cached_result(self):
+        """Wait until the caching subroutine has actually interrogated the USB port and has stored a meaningful result.
+        
+        Returns:
+            None
+        
+        Args:
+            None
+
+        Raises:
+            ? QQQ
+        
+        """
         res = None
         attempts = 0
         while res is None:
@@ -85,7 +202,19 @@ class SmartUPSInterface:
                     raise CachingStructureInitializationError("Failed to initialize the SmartUPS interface")
 
     @property
-    def latest_serial_rx(self):
+    def _latest_serial_rx(self):
+        """Lockingly/synchronously read the latest string from our USB port. Return it.
+
+        Returns:
+            str: The one-line text, without '\n' on the end
+
+        Args:
+            None
+
+        Raises:
+            ? QQQ
+
+        """
         try:
             self.__serial_rx_lck.acquire_read()
 #             txt = ''
@@ -106,6 +235,18 @@ class SmartUPSInterface:
         raise ReadOnlyError("Cannot set cached_smartups attribute. That is inappropriate!")
 
     def _read_smartups_output(self):  # FIXME: add a read-write lock for self._last_time_we_read_smartups etc.
+        """Return either (a) our cached copy or (b) the output of _latest_serial_rx(), depending on the time elapsed.
+
+        Returns:
+            str: The one-line text, without '\n' on the end
+
+        Args:
+            None
+
+        Raises:
+            ? QQQ
+
+        """
         current_timestamp = datetime.datetime.now()
         if self._last_time_we_read_smartups is None or (current_timestamp - self._last_time_we_read_smartups).seconds >= 1:
             self._last_time_we_read_smartups = current_timestamp
@@ -281,6 +422,19 @@ class SmartUPSInterface:
         raise ReadOnlyError("Cannot set timeleft attribute. That is inappropriate!")
 
     def _return_meaningful_status(self):
+        """Return a string that summarized in human-readable form the status of the RPi UPSPack.
+
+        Returns:
+            str: Meaningful description of the status of the RPi UPSPack.
+
+        Args:
+            None
+
+        Raises:
+            ? QQQ
+
+        """
+
         nowish = datetime.datetime.now()
         retdct = self.cached_smartups.result
         if retdct is None:
