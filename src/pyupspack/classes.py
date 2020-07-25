@@ -10,7 +10,7 @@ from pyupspack.exceptions import CachingStructurePrematureReadError
 from pyupspack.utilities import sleep_for_a_random_period
 
 try:
-    import serial
+    import serial  # @UnusedImport
 except ImportError as ex:
     raise ImportError("Please install pySerial module (Python 3)")
 
