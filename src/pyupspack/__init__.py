@@ -234,8 +234,8 @@ class SmartUPSInterface:
             self.__serial_rx_lck.release_read()
         return retval
 
-    @latest_serial_rx.setter
-    def latest_serial_rx(self, value):
+    @_latest_serial_rx.setter
+    def _latest_serial_rx(self, value):
         raise ReadOnlyError("Cannot set cached_smartups attribute. That is inappropriate!")
 
     def _read_smartups_output(self):  # FIXME: add a read-write lock for self._last_time_we_read_smartups etc.
@@ -254,7 +254,7 @@ class SmartUPSInterface:
         current_timestamp = datetime.datetime.now()
         if self._last_time_we_read_smartups is None or (current_timestamp - self._last_time_we_read_smartups).seconds >= 1:
             self._last_time_we_read_smartups = current_timestamp
-            self._last_smartups_output = self.latest_serial_rx
+            self._last_smartups_output = self._latest_serial_rx
         txt = self._last_smartups_output
         if txt is None:
             return None
