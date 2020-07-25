@@ -387,8 +387,8 @@ class SmartUPSInterface:
             self.__smversion_lck.release_read()
         return retval
 
-    @Vout.setter
-    def Vout(self, value):
+    @hardwareversion.setter
+    def hardwareversion(self, value):
         raise ReadOnlyError("Cannot set Vout attribute. That is inappropriate!")
 
     @property
