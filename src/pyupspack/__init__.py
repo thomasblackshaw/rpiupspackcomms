@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Python library to monitor the RPi UPSPack Standard V2
+"""Python library to monitor the RPi UPSPack Standard V2.
 
 The module 'pyupspack' facilitates communication between the RPi UPSPack Standard
 V2 and a GNU/Linux-based OS that possesses a decent Python 3 implementation. The
@@ -16,13 +16,13 @@ Example:
     >>> import time
     >>> while True:
     >>>     print(SmartUPS.verbose)
+    >>>     if SmartUPS.batterylevel is not None and SmartUPS.batterylevel < 10:
+    >>>         os.system("shutdown -h now")
     >>>     time.sleep(5)
     >>>
 
-SmartUPS is a singular (?) globally available instance of the SmartUPSInterface
-class. Import SmartUPS. Do not use SmartUPSInterface.
-
-For a full list of attributes and methods, see the SmartUPSInterface source code.
+Note:
+    For a full list of attributes and methods, see the SmartUPSInterface source code.
 
 Todo: QQQ
     * For module TODOs
@@ -53,6 +53,10 @@ except ImportError as ex:
 
 class SmartUPSInterface:
     """Interface class for the RPi UPSPack Standard V2
+    
+    This library facilitates communication between the RPi UPSPack Standard V2 and a
+    single-board computer of your choosing. Connect the UPSPack to a USB port on your
+    computer and interface with it.
 
     Attributes:
         Vout (float): Voltage out from the UPSPack's battery.
@@ -117,7 +121,10 @@ class SmartUPSInterface:
                 serial device. Otherwise, read a fresh copy whenever it's needed.
             pause_duration_between_uncached_reads (:obj:`int`, optional): How often should the cache
                 be updated? This must be a nonzero positive integer.
-                
+
+        Methods:
+            ...lots of protected methods; no public ones.
+
         Raises:
             ValueError: Bad parameters were supplied by the programmer.
             InitializationError: I failed to initialize this class instance.
