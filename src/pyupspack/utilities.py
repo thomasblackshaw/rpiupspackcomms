@@ -34,8 +34,14 @@ def loworchargebattery_string_info(i):
         return "%d minutes" % (i // 60)
     elif i >= 60:
         return "1 minute"
-    else:
+    elif i == 1:
+        return "1 second"
+    elif type(i) is int:
         return "%d seconds" % i
+    elif type(i) is float:
+        return "%f seconds" % i
+    else:
+        return "%s seconds" % i
 
 
 def sleep_for_a_random_period(maxdur):
