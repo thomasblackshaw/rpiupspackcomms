@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 """Python library to monitor the RPi UPSPack Standard V2
 
 The module 'pyupspack' facilitates communication between the RPi UPSPack Standard

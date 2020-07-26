@@ -1,22 +1,31 @@
 #!/usr/bin/python3
 
-'''
-main --- Python script to use the RPi UPSPack Standard V2's monitor script
+"""Monitor output of RPi UPSPack. Warn user if power low. Shutdown if necessary.
 
-Equipment needed:=
-- UPS board --- www.makersmthing.com/...
-- USB-to-TTL converter --- www.friendlyarm.com/
+This program monitors the output of the RPi UPSPack circuit board. When the
+battery begins discharging or begins charging, the users are warned via console
+walls and by calls to xmessage. If discharging continues, warnings continue to
+occur with greater frequency, until a shutdown occurs (if the battery level dips
+too low).
 
+Example:
+    Here is how to run me::
 
-#     SmartUPS.verbose
-#     SmartUPS.batterylevel
-#     SmartUPS.discharging
-#     SmartUPS.charging
-#     SmartUPS.Vout
+        $ python3 monitor.py
 
+I do not terminate unless you tell me to terminate. I'm tough like that.
 
-'''
+Attributes:
+    None
 
+Todo:
+    * For module TODOs
+    * You have to also use ``sphinx.ext.todo`` extension
+
+.. _Google Python Style Guide:
+   http://google.github.io/styleguide/pyguide.html
+
+"""
 import os
 
 
