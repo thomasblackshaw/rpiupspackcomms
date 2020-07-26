@@ -1,6 +1,17 @@
 #!/usr/bin/python3
-'''
-'''
+"""Useful classes used by the SmartUPSInterface class.
+
+This module contains ReadWriteLock, DummyCachingCall, and SelfCachingCall.
+They are used by the SmartUPSInterface class and perhaps by other code too.
+
+Todo:
+    * For module TODOs
+    * You have to also use ``sphinx.ext.todo`` extension
+
+.. _Google Python Style Guide:
+   http://google.github.io/styleguide/pyguide.html
+
+"""
 
 import copy
 from threading import Condition, Lock, Thread
@@ -59,6 +70,13 @@ class ReadWriteLock:
 
 
 class DummyCachingCall:
+    """Non-caching alternative to SelfCachingCall. Exists for test purposes only.
+
+    DummyCachingCall() is a class instance that doesn't actually cache anything. However, it is a
+    drop-in replacement for SelfCachingCall. For test purposes, it is very useful. See SelfCachingCall
+    for usage information, arguments, methods, attributes, and exceptions.
+    
+    """
 
     def __init__(self, refreshfrequency, func, *args, **kwargs):
         self.__args = args
