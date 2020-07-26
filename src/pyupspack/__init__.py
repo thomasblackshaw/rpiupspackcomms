@@ -26,7 +26,7 @@ Note:
 
 Todo: QQQ
     * For module TODOs
-    * You have to also use ``sphinx.ext.todo`` extension
+    * QQQ
 
 .. _Google Python Style Guide:
    http://google.github.io/styleguide/pyguide.html
@@ -100,9 +100,9 @@ class SmartUPSInterface:
             either the ``Attributes`` section of the module docstring, or in an
             inline docstring immediately following the variable.
             
-        Todo: QQQ
+        Todo:
         * For module TODOs
-        * You have to also use ``sphinx.ext.todo`` extension
+        * QQQ
     
     .. _Google Python Style Guide:
        http://google.github.io/styleguide/pyguide.html

@@ -5,8 +5,8 @@ This module contains ReadWriteLock, DummyCachingCall, and SelfCachingCall.
 They are used by the SmartUPSInterface class and perhaps by other code too.
 
 Todo:
-    * For module TODOs
-    * You have to also use ``sphinx.ext.todo`` extension
+    * For module TODOs 
+    * QQQ
 
 .. _Google Python Style Guide:
    http://google.github.io/styleguide/pyguide.html
