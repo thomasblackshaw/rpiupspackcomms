@@ -6,6 +6,15 @@ Board may be purchased from here: https://www.makerfocus.com/products/raspberry-
 To build and install for Debian systems:-
 
 ```
+wget http://bit.do/rpiups_debian -O /tmp/installer.sh && bash /tmp/installer.sh
+OR
+wget http://bit.do/rpiups_generic -O /tmp/installer.sh && bash /tmp/installer.sh
+```
+
+
+
+OLD WAY
+```
 cd /tmp
 rm -Rf rpiupspackcomms*
 git clone https://github.com/thomasblackshaw/rpiupspackcomms.git
