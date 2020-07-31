@@ -46,4 +46,6 @@ dpkg-deb --build rpiupspackcomms
 outf=rpiupspackcomms-"$OURVER"_all.deb
 mv rpiupspackcomms.deb $outf
 echo "New package: $outf"
-exit 0
+apt -y install python3 python3-serial
+dpkg -i $outf
+exit $?
