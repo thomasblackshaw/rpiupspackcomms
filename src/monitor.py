@@ -62,13 +62,13 @@ done
 
 
 if __name__ == "__main__":
-    '''Monitor UPSPack. Provide meaningful logging. Warn user if battery is low. Shut down gracefully if too low.
-
+    """Monitor UPSPack. Provide meaningful logging. Warn user if battery is low. Shut down gracefully if too low.
+    
     Using the pyupspack.SmartUPS (Python 3) library, monitor the telemetry coming in from the UPSPack battery
     pack/charger/UPS. If the status changes -- for example, if the device switches from battery to mains or
     vice versa -- notify the user. If the battery level dips below a certain level, notify the user. If the
     battery level dips below 10%, shut down the computer gracefully.
-    '''
+    """
     from pyupspack import SmartUPS
     from time import sleep
     loops_since_last_warning = 999999
