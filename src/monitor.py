@@ -33,32 +33,6 @@ import os
 #     import serial
 # except ImportError as ex:
 #     raise ImportError("Please install pySerial module (Python 3)")
-def send_global_message(msg):
-    """Send message to all console users and all XWindow users.
-    
-    By calling 'wall' and 'xmessage', send the specified message to all users.
-    I do my best to filter out weird characters that may be present in 'msg'.
-
-    Args:
-        msg (str): The message to be sent.
-
-    Returns:
-        None.
-
-    .. _PEP 484:
-        https://www.python.org/dev/peps/pep-0484/
-
-    """
-    msg = msg.replace(';', '.').replace("'", '')
-    os.system("wall '%s'" % msg)
-    os.system('''
-msg="%s"
-for u in $(users); do
-    for disp in 0 1 2 3 ; do
-        su -l $u -c "DISPLAY=:$disp xmessage -timeout 10 '$msg'" 2> /dev/null &
-    done
-done
-''' % msg)
 
 
 def generate_our_logging_string():
