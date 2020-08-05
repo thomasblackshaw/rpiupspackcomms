@@ -68,7 +68,7 @@ if __name__ == "__main__":
             if loops_since_last_warning > 0:
                 loops_since_last_warning = 0
                 send_global_message(SmartUPS.verbose)
-        if SmartUPS.discharging and SmartUPS.batterylevel is not None and SmartUPS.batterylevel < 10:
+        if SmartUPS.discharging and SmartUPS.batterylevel is not None and SmartUPS.batterylevel >= 10:
             # Tell all users repeatedly (with a decent pause in between), we're running on batteries
             loops_since_last_warning += 1
             if loops_since_last_warning > SmartUPS.batterylevel:
