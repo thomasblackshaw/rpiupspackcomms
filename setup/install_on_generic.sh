@@ -30,7 +30,7 @@ tweak_rclocal() {
     cp -f /etc/rc.local /etc/.rc.local.before-rpiupspackcomms
     head -n$(($lino_of_exit0-1)) /etc/.rc.local.before-rpiupspackcomms> /etc/rc.local
     cat << EOF >> /etc/rc.local
-bash /usr/bin/rpiupspackcomms.sh
+while true; do bash /usr/bin/rpiupspackcomms.sh; sleep 5; done
 exit 0
 EOF
 }
