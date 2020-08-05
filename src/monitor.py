@@ -61,6 +61,14 @@ done
 ''' % msg)
 
 
+def generate_our_logging_string():
+    if SmartUPS.Vout is None:
+        return "Waiting for UPS to connect"
+    else:
+        return "Vout=%1.4f; charging?%s; discharging?%s; batterylevel=%d%%; timeleft=%s; verbose=%s" % (SmartUPS.Vout, 'Yes' if SmartUPS.charging else 'No',
+                    'Yes' if SmartUPS.discharging else 'No', SmartUPS.batterylevel, ('?' if SmartUPS.timeleft is None else (str(SmartUPS.timeleft // 60) + 'm')), SmartUPS.verbose)
+
+
 if __name__ == "__main__":
     """Monitor UPSPack. Provide meaningful logging. Warn user if battery is low. Shut down gracefully if too low.
     
@@ -73,11 +81,7 @@ if __name__ == "__main__":
     from time import sleep
     loops_since_last_warning = 999999
     while True:
-        if SmartUPS.Vout is None:
-            loggingstring = "Waiting for UPS to connect"
-        else:
-            loggingstring = "Vout=%1.4f; charging?%s; discharging?%s; batterylevel=%d%%; timeleft=%s; verbose=%s" % (SmartUPS.Vout, 'Yes' if SmartUPS.charging else 'No',
-                        'Yes' if SmartUPS.discharging else 'No', SmartUPS.batterylevel, ('?' if SmartUPS.timeleft is None else (str(SmartUPS.timeleft // 60) + 'm')), SmartUPS.verbose)
+        loggingstring = generate_our_logging_string()
         print(loggingstring)
         with open("/var/log/rpiupspackcomms", "a") as f:
             f.write(loggingstring + '\n')
