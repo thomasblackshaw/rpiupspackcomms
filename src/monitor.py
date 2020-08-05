@@ -74,13 +74,13 @@ if __name__ == "__main__":
     loops_since_last_warning = 999999
     while True:
         if SmartUPS.Vout is None:
-            s = "Waiting for UPS to connect"
+            loggingstring = "Waiting for UPS to connect"
         else:
-            s = "Vout=%1.4f; charging?%s; discharging?%s; batterylevel=%d%%; timeleft=%s; verbose=%s" % (SmartUPS.Vout, 'Yes' if SmartUPS.charging else 'No',
+            loggingstring = "Vout=%1.4f; charging?%s; discharging?%s; batterylevel=%d%%; timeleft=%s; verbose=%s" % (SmartUPS.Vout, 'Yes' if SmartUPS.charging else 'No',
                         'Yes' if SmartUPS.discharging else 'No', SmartUPS.batterylevel, ('?' if SmartUPS.timeleft is None else (str(SmartUPS.timeleft // 60) + 'm')), SmartUPS.verbose)
-        print(s)
+        print(loggingstring)
         with open("/var/log/rpiupspackcomms", "a") as f:
-            f.write(s + '\n')
+            f.write(loggingstring + '\n')
         if SmartUPS.charging:
             if loops_since_last_warning > 0:
                 loops_since_last_warning = 0
