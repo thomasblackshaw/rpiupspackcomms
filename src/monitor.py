@@ -69,6 +69,13 @@ def generate_our_logging_string():
                     'Yes' if SmartUPS.discharging else 'No', SmartUPS.batterylevel, ('?' if SmartUPS.timeleft is None else (str(SmartUPS.timeleft // 60) + 'm')), SmartUPS.verbose)
 
 
+def generate_echo_and_log_our_logging_string():
+    loggingstring = generate_our_logging_string()
+    print(loggingstring)
+    with open("/var/log/rpiupspackcomms", "a") as f:
+        f.write(loggingstring + '\n')
+
+
 if __name__ == "__main__":
     """Monitor UPSPack. Provide meaningful logging. Warn user if battery is low. Shut down gracefully if too low.
     
@@ -81,10 +88,7 @@ if __name__ == "__main__":
     from time import sleep
     loops_since_last_warning = 999999
     while True:
-        loggingstring = generate_our_logging_string()
-        print(loggingstring)
-        with open("/var/log/rpiupspackcomms", "a") as f:
-            f.write(loggingstring + '\n')
+        generate_echo_and_log_our_logging_string()
         if SmartUPS.charging:
             if loops_since_last_warning > 0:
                 loops_since_last_warning = 0
