@@ -27,7 +27,7 @@ Todo:
 
 """
 import os
-
+from pyupspack.utilities import send_global_message
 
 # try:
 #     import serial
