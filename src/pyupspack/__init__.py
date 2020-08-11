@@ -109,7 +109,7 @@ class SmartUPSInterface:
 
     """
 
-    def __init__(self, serial_device, use_caching=True, pause_duration_between_uncached_reads=1):
+    def __init__(self, serial_device, use_caching=True, baudrate=9600, pause_duration_between_uncached_reads=1):
         """The __init__ method of the SmartUPSInterface class.
 
         Note:
@@ -150,7 +150,7 @@ class SmartUPSInterface:
         self._verbose_werewechargingordischarging = None
         self._serial_iface = serial.Serial(
             port=serial_device,
-            baudrate=9600,
+            baudrate=baudrate,
             timeout=1,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
