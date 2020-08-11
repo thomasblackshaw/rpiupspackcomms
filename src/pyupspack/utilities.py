@@ -52,7 +52,7 @@ def identify_serial_device():
         None
 
     Returns:
-        bool: The return value. True for success, False otherwise.
+        str: The return value ("/dev/{...}") if found. Otherwise, raise an exception.
     
     Raises:
         SmartUPSInitializationError: Cannot find the device.
