@@ -9,7 +9,7 @@ it into something meaningful. The RPi UPSPack may be purchased from
 ```https://www.makerfocus.com/products/raspberry-pi-expansion-board-ups-pack-standard-power-supply```.
 
 Example:
-    Here is a simple example of how to use the library::
+    Here is a simple example of how to use the library:
     
     $ python3
     >>> from pyupspack import SmartUPS
