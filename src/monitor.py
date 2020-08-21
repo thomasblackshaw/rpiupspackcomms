@@ -61,6 +61,11 @@ if __name__ == "__main__":
     from pyupspack import SmartUPS
     from time import sleep
     loops_since_last_warning = 999999
+    i = 10
+    while i > 0 and 'Waiting for UPS' not in generate_our_logging_string():
+        sleep(5)
+    if i == 0:
+        raise SystemError("Unable to contact UPS")
     while True:
         generate_echo_and_log_our_logging_string()
         if SmartUPS.charging:
