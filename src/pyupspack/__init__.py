@@ -478,6 +478,8 @@ class SmartUPSInterface:
                 self._our_timeremainingestimate_dct[current_battery_level] = -time_taken_to_change_by_one_percentage_point * (100 - current_battery_level)
                 print("As if by magic, the value is %d" % self._our_timeremainingestimate_dct[current_battery_level])
             retdct['timeleft'] = self._our_timeremainingestimate_dct[current_battery_level]
+            if retdct['timeleft'] < 0:
+                retdct['timeleft'] = 999999999  # Battery level FELL, even though we're charging. WEIRD.
             retdct['verbose'] = "Charging. Battery at %d%%. Time until full: %s" % (current_battery_level, loworchargebattery_string_info(retdct['timeleft']))  #  #                outstr = "In %d seconds, the battery level has risen from %d%% to %d%%. Time to full: %s" % (seconds_since_discharging_began, initial_battery_level, current_battery_level, loworchargebattery_string_info(self._verbose_dct['timeleft']))
         else:
             retdct['verbose'] = "Recalculating..."
