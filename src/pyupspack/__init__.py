@@ -141,7 +141,6 @@ class SmartUPSInterface:
         self.__charging_lock = ReadWriteLock()
         self.__serial_rx_lck = ReadWriteLock()
         self.__serial_device = serial_device
-        self.__timeleft_list = []
         self._last_time_we_read_smartups = None
         self._last_smartups_output = None
         self._when_did_we_start_discharging = None
@@ -417,15 +416,7 @@ class SmartUPSInterface:
     def timeleft(self):
         try:
             self.__time_left_lck.acquire_read()
-            status = self._return_meaningful_status()
-            timeleft = None if status is None else status['timeleft']
-            if timeleft is None:
-                retval = timeleft
-            else:
-                self.__timeleft_list.insert(0, timeleft)
-                if len(self.__timeleft_list) >= 10:
-                    _ = self.__timeleft_list.pop()
-                retval = sum(self.__timeleft_list) // len(self.__timeleft_list)
+            retval = self.timeleft_and_verboseinfo()[0]
         finally:
             self.__time_left_lck.release_read()
         return retval
