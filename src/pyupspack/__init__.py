@@ -143,6 +143,7 @@ class SmartUPSInterface:
         self.__serial_device = serial_device
         self._last_time_we_read_smartups = None
         self._last_smartups_output = None
+        self._our_timeremainingestimate_dct = {}  # Used by timeleft_and_verboseinfo()
         self._when_did_we_start_discharging = None
         self._when_did_we_start_recharging = None
         self._what_was_battery_level_when_we_did_start_disch_or_rchgg = None
@@ -279,12 +280,14 @@ class SmartUPSInterface:
                 self._when_did_we_start_recharging = datetime.datetime.now()
                 self._when_did_we_start_discharging = None
                 self._what_was_battery_level_when_we_did_start_disch_or_rchgg = int(dct['BATCAP'])
+                self._our_timeremainingestimate_dct = {}  # Used by timeleft_and_verboseinfo()
                 if self._verbose_werewechargingordischarging is None:
                     self._verbose_werewechargingordischarging = 'charging'
         else:
             if self._when_did_we_start_discharging is None:
                 self._when_did_we_start_discharging = datetime.datetime.now()
                 self._when_did_we_start_recharging = None
+                self._our_timeremainingestimate_dct = {}  # Used by timeleft_and_verboseinfo()
                 self._what_was_battery_level_when_we_did_start_disch_or_rchgg = int(dct['BATCAP'])
                 if self._verbose_werewechargingordischarging is None:
                     self._verbose_werewechargingordischarging = 'discharging'
@@ -401,7 +404,7 @@ class SmartUPSInterface:
         try:
             self.__verbostxt_lck.acquire_read()
             try:
-                retval = self._return_meaningful_status()['verbose']  # TODO: make more OO, less 1960s
+                retval = self.timeleft_and_verboseinfo()[1]
             except (TypeError, ValueError, CachingStructurePrematureReadError):
                 return None
         finally:
@@ -425,11 +428,13 @@ class SmartUPSInterface:
     def timeleft(self, value):
         raise ReadOnlyError("Cannot set timeleft attribute. That is inappropriate!")
 
-    def _return_meaningful_status(self):
-        """Return a string that summarized in human-readable form the status of the RPi UPSPack.
-
+    def timeleft_and_verboseinfo(self, fake_dct=None):
+        """Return a tuple containing the time left and a verbose string describing the current status.
+        
         Returns:
-            str: Meaningful description of the status of the RPi UPSPack.
+            tuple:
+                int: time left in seconds
+                str: verbose description of status 
 
         Args:
             None
@@ -440,7 +445,7 @@ class SmartUPSInterface:
         """
 
         nowish = datetime.datetime.now()
-        retdct = self.cached_smartups.result
+        retdct = fake_dct if fake_dct else self.cached_smartups.result
         if retdct is None:
             return None
         assert(self._when_did_we_start_discharging is not None or self._when_did_we_start_recharging is not None)
@@ -458,7 +463,10 @@ class SmartUPSInterface:
         elif initial_battery_level is None or time_taken_to_change_by_one_percentage_point == 0:
             retdct['verbose'] = "Battery is %s; currently at %d%%." % ("recharging" if self.charging else "discharging" if self.discharging else "trickling", current_battery_level)  # retdct['Vin' ] == 'GOOD' else "discharging" if current_battery_level < 100
         elif self.discharging:
-            retdct['timeleft'] = time_taken_to_change_by_one_percentage_point * (initial_battery_level - 20)
+            if current_battery_level not in self._our_timeremainingestimate_dct.keys():
+                self._our_timeremainingestimate_dct[current_battery_level] = time_taken_to_change_by_one_percentage_point * (initial_battery_level - 20)
+                print("As if by magik, the value is %d" % self._our_timeremainingestimate_dct[current_battery_level])
+            retdct['timeleft'] = self._our_timeremainingestimate_dct[current_battery_level]
             self._verbose_werewechargingordischarging = 'discharging'
             if retdct['timeleft'] < 0:
                 retdct['verbose'] = "EVERYBODY PANIC!!!!! BATTERY IS HELLA LOW."
@@ -466,11 +474,14 @@ class SmartUPSInterface:
                 retdct['verbose'] = "Discharging. Battery at %d%%. Time until low battery: %s" % (current_battery_level, loworchargebattery_string_info(retdct['timeleft']))  # #                outstr = "In %d seconds, the battery level has fallen from %d%% to %d%%. Time to low battery: %s" % (seconds_since_discharging_began, initial_battery_level, current_battery_level, loworchargebattery_string_info(self._verbose_dct['timeleft']))
         elif self.charging:
             self._verbose_werewechargingordischarging = 'charging'  #        ['Vin'] == 'GOOD'
-            retdct['timeleft'] = -time_taken_to_change_by_one_percentage_point * (100 - current_battery_level)
+            if current_battery_level not in self._our_timeremainingestimate_dct.keys():
+                self._our_timeremainingestimate_dct[current_battery_level] = -time_taken_to_change_by_one_percentage_point * (100 - current_battery_level)
+                print("As if by magic, the value is %d" % self._our_timeremainingestimate_dct[current_battery_level])
+            retdct['timeleft'] = self._our_timeremainingestimate_dct[current_battery_level]
             retdct['verbose'] = "Charging. Battery at %d%%. Time until full: %s" % (current_battery_level, loworchargebattery_string_info(retdct['timeleft']))  #  #                outstr = "In %d seconds, the battery level has risen from %d%% to %d%%. Time to full: %s" % (seconds_since_discharging_began, initial_battery_level, current_battery_level, loworchargebattery_string_info(self._verbose_dct['timeleft']))
         else:
             retdct['verbose'] = "Recalculating..."
-        return retdct
+        return (retdct['timeleft'], retdct['verbose'])
 
 
 SmartUPS = SmartUPSInterface(serial_device=identify_serial_device(), use_caching=True, pause_duration_between_uncached_reads=1)
