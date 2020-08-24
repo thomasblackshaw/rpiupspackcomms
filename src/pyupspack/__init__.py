@@ -189,8 +189,9 @@ class SmartUPSInterface:
                 res = self._read_smartups_output()
                 print("_forgivingly_read_smartups_output() -- after %d attempts, returning %s" % (attempts + 1, str(res)))
                 return res
-            except Exception:
-                sleep_for_a_random_period(.5)
+            except Exception as ex:
+                print("%s occurred while trying to read from serial port" % str(ex))
+                sleep_for_a_random_period(random.randint(1, 10) / 10.)
         raise ReadSmartUPSError("Attempted %d times to read the smartUPS output. Failed totally." % attempts)
 
     def _wait_until_nonNone_cached_result(self):
