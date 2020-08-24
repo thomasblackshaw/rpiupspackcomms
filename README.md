@@ -3,7 +3,7 @@ Tools for communicating with the RPi UPSPack circuit board via its TTL/USB port
 
 Board may be purchased from here: https://www.makerfocus.com/products/raspberry-pi-expansion-board-ups-pack-standard-power-supply
 
-To build and install:-
+To build and install::
 
 ```
 wget http://bit.do/rpiups_debian -O /tmp/installer.sh && bash /tmp/installer.sh
