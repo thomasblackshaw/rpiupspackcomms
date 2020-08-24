@@ -187,6 +187,7 @@ class SmartUPSInterface:
         for attempts in range(10):
             try:
                 res = self._read_smartups_output()
+                print("_forgivingly_read_smartups_output() -- after %d attempts, returning %s" % (attempts + 1, str(res)))
                 return res
             except Exception:
                 sleep_for_a_random_period(.5)
