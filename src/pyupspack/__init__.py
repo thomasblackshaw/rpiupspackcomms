@@ -130,6 +130,8 @@ class SmartUPSInterface:
             InitializationError: I failed to initialize this class instance.
 
         """
+        if pause_duration_between_uncached_reads < 2:
+            raise ValueError("Please specify a pause_duration_between_uncached_reads of 2 or more.")
         self.__serialdev_lck = ReadWriteLock()
         self.__smupsinfo_lck = ReadWriteLock()
         self.__battlevel_lck = ReadWriteLock()
@@ -151,7 +153,7 @@ class SmartUPSInterface:
         self._serial_iface = serial.Serial(
             port=serial_device,
             baudrate=baudrate,
-            timeout=1,
+            timeout=pause_duration_between_uncached_reads - 0.5,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS
@@ -486,5 +488,5 @@ class SmartUPSInterface:
         return (retdct['timeleft'], retdct['verbose'])
 
 
-SmartUPS = SmartUPSInterface(serial_device=identify_serial_device(), use_caching=True, pause_duration_between_uncached_reads=1)
+SmartUPS = SmartUPSInterface(serial_device=identify_serial_device(), use_caching=True, pause_duration_between_uncached_reads=2)
 
