@@ -469,9 +469,9 @@ class SmartUPSInterface:
             retdct['timeleft'] = self._our_timeremainingestimate_dct[current_battery_level]
             self._verbose_werewechargingordischarging = 'discharging'
             if retdct['timeleft'] < 0:
-                retdct['verbose'] = "EVERYBODY PANIC!!!!! BATTERY IS HELLA LOW."
+                retdct['verbose'] = "Discharging. Battery at %d%%." % current_battery_level
             else:
-                retdct['verbose'] = "Discharging. Battery at %d%%. Time until low battery: %s" % (current_battery_level, loworchargebattery_string_info(retdct['timeleft']))  # #                outstr = "In %d seconds, the battery level has fallen from %d%% to %d%%. Time to low battery: %s" % (seconds_since_discharging_began, initial_battery_level, current_battery_level, loworchargebattery_string_info(self._verbose_dct['timeleft']))
+                retdct['verbose'] = "Discharging. Battery at %d%%. Time until low battery: %s" % (current_battery_level, loworchargebattery_string_info(retdct['timeleft']))
         elif self.charging:
             self._verbose_werewechargingordischarging = 'charging'  #        ['Vin'] == 'GOOD'
             if current_battery_level not in self._our_timeremainingestimate_dct.keys():
@@ -480,7 +480,7 @@ class SmartUPSInterface:
             retdct['timeleft'] = self._our_timeremainingestimate_dct[current_battery_level]
             if retdct['timeleft'] < 0:
                 retdct['timeleft'] = 999999999  # Battery level FELL, even though we're charging. WEIRD.
-            retdct['verbose'] = "Charging. Battery at %d%%. Time until full: %s" % (current_battery_level, loworchargebattery_string_info(retdct['timeleft']))  #  #                outstr = "In %d seconds, the battery level has risen from %d%% to %d%%. Time to full: %s" % (seconds_since_discharging_began, initial_battery_level, current_battery_level, loworchargebattery_string_info(self._verbose_dct['timeleft']))
+            retdct['verbose'] = "Charging. Battery at %d%%. Time until full: %s" % (current_battery_level, loworchargebattery_string_info(retdct['timeleft']))
         else:
             retdct['verbose'] = "Recalculating..."
         return (retdct['timeleft'], retdct['verbose'])
